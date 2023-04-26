@@ -1,10 +1,10 @@
 {
   inputs = {
-    purs-nix.url = "github:purs-nix/purs-nix";
+    purs-nix.url = "github:purs-nix/purs-nix/ps-0.15";
     nixpkgs.follows = "purs-nix/nixpkgs";
     utils.url = "github:ursi/flake-utils";
     # optional
-    # ps-tools.follows = "purs-nix/ps-tools";
+    ps-tools.follows = "purs-nix/ps-tools";
   };
 
   outputs = { self, utils, ... }@inputs:
@@ -34,6 +34,7 @@
               # foreign.Main.node_modules = [];
             };
           ps-command = ps.command { };
+          ps-tools = inputs.ps-tools.legacyPackages.${system};
         in
         {
           packages.default = ps.output { };
