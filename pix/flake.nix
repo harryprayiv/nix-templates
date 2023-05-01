@@ -1,17 +1,14 @@
 {
   inputs = {
-    purs-nix.url = "github:purs-nix/purs-nix";
+    purs-nix.url = "github:purs-nix/purs-nix/ps-0.15";
     nixpkgs.follows = "purs-nix/nixpkgs";
     utils.url = "github:ursi/flake-utils";
-    # optional
-    # ps-tools.follows = "purs-nix/ps-tools";
+    ps-tools.follows = "purs-nix/ps-tools";
   };
 
   outputs = { self, utils, ... }@inputs:
     let
-      # TODO add missing arm to match standard systems
-      #  right now purs-nix is only compatible with x86_64-linux
-      systems = [ "x86_64-linux" ];
+      systems = [ "x86_64-linux" "x86_64-darwin" ];
     in
     utils.apply-systems
       { inherit inputs systems; }
@@ -33,6 +30,7 @@
               # FFI dependencies
               # foreign.Main.node_modules = [];
             };
+          ps-tools = inputs.ps-tools.legacyPackages.${system};
           ps-command = ps.command { };
         in
         {
@@ -46,10 +44,12 @@
                   [
                     ps-command
                     # optional devShell tools
-                    # ps-tools.for-0_15.purescript-language-server
-                    # purs-nix.esbuild
-                    # purs-nix.purescript
-                    # nodejs
+                    ps-tools.for-0_15.purescript-language-server
+                    # purescript-language-server
+                    purs-nix.esbuild
+                    purs-nix.purescript
+                    nodejs
+                    spago
                   ];
               };
         });
